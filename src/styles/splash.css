@@ -1,0 +1,172 @@
+/* =========================================================
+   CADENCE — SPLASH / LOADER (was the inline <style> in index.html)
+   Scoped under .splash and prefixed with "splash-" because the
+   original rules targeted body, :root and .brand-mark directly,
+   which would leak into every other page in a single-page app.
+   ========================================================= */
+
+.splash {
+  --bg: #1a1b1f;
+  --surface: #1e1f24;
+  --border: rgba(255, 255, 255, 0.07);
+  --lime: #d8f34e;
+  --purple: #7c6ffa;
+  --text-primary: #f4f4f6;
+  --text-secondary: #a6a6b0;
+  --text-muted: #6f6f78;
+
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--bg);
+  font-family: var(--font-body);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:root[data-theme="light"] .splash {
+  --bg: #f6f6f8;
+  --surface: #ffffff;
+  --border: rgba(20, 20, 25, 0.1);
+  --lime: #6f8f1f;
+  --purple: #7c6ffa;
+  --text-primary: #16171b;
+  --text-secondary: #55565f;
+  --text-muted: #85858f;
+}
+
+.splash *, .splash *::before, .splash *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ambient glows, same treatment as the auth pages */
+.splash::before,
+.splash::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(10px);
+}
+.splash::before {
+  top: -15%;
+  right: -15%;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(216, 243, 78, 0.14) 0%, rgba(216, 243, 78, 0) 70%);
+}
+.splash::after {
+  bottom: -20%;
+  left: -15%;
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, rgba(124, 111, 250, 0.16) 0%, rgba(124, 111, 250, 0) 70%);
+}
+
+@media (min-width: 480px) {
+  .splash::before { width: 480px; height: 480px; right: -10%; }
+  .splash::after { width: 420px; height: 420px; left: -12%; }
+}
+
+.splash-loader {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  padding: 0 20px;
+}
+
+/* logo mark — mobile-first base size */
+.splash-mark {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 16px 32px -16px rgba(0, 0, 0, 0.5);
+  animation: splash-pulse 2.2s ease-in-out infinite;
+}
+.splash-mark svg { width: 20px; height: 20px; }
+
+@keyframes splash-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 16px 32px -16px rgba(0, 0, 0, 0.5); }
+  50% { transform: scale(1.06); box-shadow: 0 20px 40px -16px rgba(216, 243, 78, 0.25); }
+}
+
+.splash-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 17px;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+/* progress bar — mobile-first base width */
+.splash-bar-track {
+  width: min(260px, 80vw);
+  height: 5px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  position: relative;
+}
+.splash-bar-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 40%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--lime), var(--purple), transparent);
+  animation: splash-slide 1.4s ease-in-out infinite;
+}
+@keyframes splash-slide {
+  0%   { left: -40%; }
+  100% { left: 100%; }
+}
+
+.splash-status {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+.splash-status .dots span {
+  opacity: 0;
+  animation: splash-dot 1.4s infinite;
+}
+.splash-status .dots span:nth-child(1) { animation-delay: 0s; }
+.splash-status .dots span:nth-child(2) { animation-delay: 0.2s; }
+.splash-status .dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes splash-dot {
+  0%, 20% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ---- scale up from small tablets and up ---- */
+@media (min-width: 480px) {
+  .splash-loader { gap: 28px; padding: 0 24px; }
+  .splash-mark { width: 52px; height: 52px; border-radius: 16px; }
+  .splash-mark svg { width: 24px; height: 24px; }
+  .splash-name { font-size: 19px; }
+  .splash-bar-track { width: min(320px, 70vw); height: 6px; }
+  .splash-status { font-size: 13px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-mark, .splash-bar-fill, .splash-status .dots span {
+    animation: none !important;
+  }
+  .splash-bar-fill { width: 60%; left: 0; }
+}

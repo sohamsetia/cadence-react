@@ -1,0 +1,10 @@
+/* =========================================================
+   CADENCE — REACT-ONLY ADJUSTMENTS
+   The three original stylesheets are used unchanged; this file
+   only covers what the move to a single React root requires.
+   ========================================================= */
+
+/* #root sits between <body> and each page's top-level element.
+   display:contents keeps it out of layout, so body-level rules such
+   as .auth-body { display:flex } lay out the page exactly as before. */
+#root { display: contents; }
